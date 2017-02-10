@@ -1,0 +1,54 @@
+{
+  "serverConfig": {
+    "port": "8080",
+    "threadPoolSize": "10",
+    "serverName": "Tears 1.2 - beta",
+    "staticRootFile": "/Library/WebServer/Documents/netcloud",
+    "defaultCharset": "UTF-8",
+    "socketFilter": [
+      "com.zjh.tears.filter.socket.HTTPRequestSocketFilter",
+      "com.zjh.tears.filter.socket.TestSocketFilter"
+    ],
+    "socketListener": [
+      "com.zjh.tears.listener.socket.DebugSocketListener",
+      "com.zjh.tears.listener.socket.TestSocketListener"
+    ],
+    "httpHandler": [
+      "com.zjh.tears.handler.DefaultIndexHTTPHandler",
+      "com.zjh.tears.handler.URLDecodeHTTPHandler",
+      "com.zjh.tears.handler.FileExistHTTPHandler",
+      "com.zjh.tears.handler.ResponseCodeHTTPHandler",
+      "com.zjh.tears.handler.StaticFileStrategyHTTPHandler",
+      "com.zjh.tears.handler.StaticFileHTTPHandler",
+      "com.zjh.tears.handler.ResponseHeaderHTTPHandler"
+    ],
+    "staticFileStrategy": [
+      {
+        "name": "200",
+        "strategy": "com.zjh.tears.strategy.DefaultCode200Strategy"
+      },
+      {
+        "name": "206",
+        "strategy": "com.zjh.tears.strategy.DefaultCode206Strategy"
+      }
+    ]
+  },
+  "pageConfig": {
+    "defaultIndex": "index.html",
+    "errorPages": [
+      {
+        "code": "404",
+        "page": "404.html"
+      },
+      {
+        "code": "403",
+        "page": "403.html"
+      },
+      {
+        "code": "500",
+        "page": "500.html"
+      }
+    ]
+
+  }
+}
