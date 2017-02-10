@@ -1,4 +1,7 @@
 # Tears
-Java WebServer, Simple, JSON Config, EASY TO USE!
+特点：
+1. 由Java语言编写的静态资源服务器
+2. 简单。配制简单，修改简单，二次开发简单
+3. 使用基于JSON的配置文件，灵活
 
 # 文档补全计划未开始
