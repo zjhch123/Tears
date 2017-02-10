@@ -19,7 +19,7 @@ public class ClassParse {
     }
 
     public Object getObject(String name) throws Exception {
-        Object obj = null;
+        Object obj;
         Class c = Class.forName(name);
         obj = c.newInstance();
         return obj;
