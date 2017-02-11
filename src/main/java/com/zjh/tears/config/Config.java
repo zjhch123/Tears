@@ -7,6 +7,8 @@ import com.zjh.tears.handler.HTTPHandler;
 import com.zjh.tears.listener.socket.HeaderSocketListener;
 import com.zjh.tears.listener.socket.SocketListener;
 import com.zjh.tears.util.ClassParse;
+import com.zjh.tears.util.Util;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -48,59 +50,90 @@ public final class Config {
     public static Set<File> ACCEPT_FILE = new HashSet<>();
     public static Set<File> EXCEPT_FILE = new HashSet<>();
 
-    static {
+    private static Logger logger = Logger.getLogger(Config.class);
 
+    static {
+logger.debug("Load Config File...");
         File configFile = new File(Config.class.getClassLoader().getResource("config.json").getFile());
         try {
+long startTime = System.currentTimeMillis();
+            logger.debug("\n  _____   _____       ___   _____    _____  \n" +
+                    "|_   _| | ____|     /   | |  _  \\  /  ___/ \n" +
+                    "  | |   | |__      / /| | | |_| |  | |___  \n" +
+                    "  | |   |  __|    / / | | |  _  /  \\___  \\ \n" +
+                    "  | |   | |___   / /  | | | | \\ \\   ___| | \n" +
+                    "  |_|   |_____| /_/   |_| |_|  \\_\\ /_____/  - zjh\n");
             JSONObject config = new JSONObject(Files.readAllLines(configFile.toPath()).stream().collect(Collectors.joining()));
+logger.debug("Load Config File SUCCESS!");
+logger.debug("Setting...");
             JSONObject serverConfig = config.getJSONObject("serverConfig");
             JSONObject pageConfig = config.getJSONObject("pageConfig");
             JSONObject acceptConfig = config.getJSONObject("acceptConfig");
             Config.INIT_SERVER_CONFIG(serverConfig);
             Config.INIT_PAGE_CONFIG(pageConfig);
             Config.INIT_ACCEPT_CONFIG(acceptConfig);
+long endTime = System.currentTimeMillis();
+logger.debug("Config SUCCESS! at " + (endTime - startTime) + "ms");
+logger.debug("Server start...");
         } catch (IOException e) {
             e.printStackTrace();
+            logger.error(Util.stackTraceToString(e));
             System.exit(-1);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error(Util.stackTraceToString(e));
             System.exit(-1);
         }
     }
 
     private static final void INIT_SERVER_CONFIG(final JSONObject serverConfig) throws Exception {
         Config.PORT = serverConfig.getInt("port");
+logger.debug("server port - " + Config.PORT);
         Config.THREAD_POOL_SIZE = serverConfig.getInt("threadPoolSize");
+logger.debug("server thread pool size - " + Config.THREAD_POOL_SIZE);
         Config.SERVER_NAME = serverConfig.getString("serverName");
+logger.debug("server name - " + Config.SERVER_NAME);
         Config.STATIC_ROOT_FILE = serverConfig.getString("staticRootFile");
+logger.debug("static root file - " + Config.STATIC_ROOT_FILE);
         Config.DEFAULT_CHARSET = serverConfig.getString("defaultCharset");
+logger.debug("default charset - " + Config.DEFAULT_CHARSET);
         SocketFilter headerFilter = Config.SOCKET_FILTER_HEADER;
+logger.debug("Init Socket Filter...");
         for (Object obj : serverConfig.getJSONArray("socketFilter")) {
             String className = (String) obj;
+logger.debug("init class - " + className);
             SocketFilter filter = (SocketFilter) ClassParse.getInstance().getObject(className);
             headerFilter.setNext(filter);
             headerFilter = filter;
         }
-
+logger.debug("Init Socket Filter SUCCESS!");
         SocketListener headerListener = Config.SOCKET_LISTENER_HEADER;
+logger.debug("Init Socket Listener...");
         for (Object obj : serverConfig.getJSONArray("socketListener")) {
             String className = (String) obj;
+logger.debug("init class - " + className);
             SocketListener listener = (SocketListener) ClassParse.getInstance().getObject(className);
             headerListener.setNext(listener);
             headerListener = listener;
         }
-
+logger.debug("Init Socket Listener SUCCESS!");
         HTTPHandler headerHandler = Config.HTTP_HANDLER_HEADER;
+logger.debug("Init HTTP Handler...");
         for (Object obj : serverConfig.getJSONArray("httpHandler")) {
             String className = (String) obj;
+logger.debug("init class - " + className);
             HTTPHandler handler = (HTTPHandler) ClassParse.getInstance().getObject(className);
             headerHandler.setNext(handler);
             headerHandler = handler;
         }
-
+logger.debug("Init HTTP Handler SUCCESS!");
+logger.debug("Init Static File Strategy...");
         for (Object obj : serverConfig.getJSONArray("staticFileStrategy")) {
             JSONObject strategy = (JSONObject) obj;
-            STATIC_FILE_STRATEGYS.put(strategy.getString("name"), strategy.getString("strategy"));
+            String strategyName = strategy.getString("name");
+            String strategyClass = strategy.getString("strategy");
+logger.debug("init strategy - " + strategyName + ", class - " + strategyClass);
+            STATIC_FILE_STRATEGYS.put(strategyName, strategyClass);
         }
     }
 
@@ -109,17 +142,24 @@ public final class Config {
             String index = (String) obj;
             Config.DEFAULT_INDEX.add(index);
         }
+logger.debug("set default Index - " + Config.DEFAULT_INDEX);
         for (Object obj : pageConfig.getJSONArray("errorPages")) {
             JSONObject errorPage = (JSONObject) obj;
-            Config.ERR_PAGES.put(errorPage.getInt("code"), errorPage.getString("page"));
+            int code = errorPage.getInt("code");
+            String page = errorPage.getString("page");
+            Config.ERR_PAGES.put(code, page);
+logger.debug("set error Page - code " + code + ", page " + page);
         }
     }
 
     private static final void INIT_ACCEPT_CONFIG(final JSONObject acceptConfig) {
         Config.ACCEPT_CONFIG_USAGE = acceptConfig.optBoolean("usage", false);
+logger.debug("accept config usage? - " + Config.ACCEPT_CONFIG_USAGE);
         if(Config.ACCEPT_CONFIG_USAGE) {
             JSONArray accept = acceptConfig.getJSONArray("accept");
+logger.debug("load accept path pattern - " + accept);
             JSONArray except = acceptConfig.getJSONArray("except");
+logger.debug("load except path pattern - " + except);
             Config.initFile(true, accept);
             Config.initFile(false, except);
         }
