@@ -17,8 +17,9 @@
       "com.zjh.tears.handler.DefaultIndexHTTPHandler",
       "com.zjh.tears.handler.URLDecodeHTTPHandler",
       "com.zjh.tears.handler.FileExistHTTPHandler",
+      "com.zjh.tears.handler.AcceptFileHTTPHandler",
       "com.zjh.tears.handler.ResponseCodeHTTPHandler",
-      "com.zjh.tears.handler.StaticFileStrategyHTTPHandler",
+      "com.zjh.tears.handler.StaticFileChooseStrategyHTTPHandler",
       "com.zjh.tears.handler.StaticFileHTTPHandler",
       "com.zjh.tears.handler.ResponseHeaderHTTPHandler"
     ],
@@ -51,6 +52,16 @@
         "page": "500.html"
       }
     ]
-
+  },
+  "acceptConfig": {
+    "usage": "true",
+    "accept":[
+      "/*.*",
+      "/*/*.*",
+      "/*/*/*.*"
+    ],
+    "except": [
+      "/config.html"
+    ]
   }
 }
