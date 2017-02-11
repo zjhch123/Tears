@@ -14,7 +14,7 @@ public class FileExistHTTPHandler extends HTTPHandler {
     @Override
     public void doWithRequest(Request req, Response res) throws HTTPException {
         File file = new File(req.getRealPath());
-        if(!file.exists()) {
+        if(!file.exists() || file.isDirectory()) {
             throw new NotFoundException();
         }
     }

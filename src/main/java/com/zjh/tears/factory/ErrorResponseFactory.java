@@ -42,7 +42,7 @@ public class ErrorResponseFactory {
         res.setCode(code);
         byte[] resByte;
         try {
-            resByte = Files.readAllBytes(new File(Config.STATIC_ROOT_FILE + file).toPath());
+            resByte = Files.readAllBytes(new File(Config.STATIC_ROOT_FILE + File.separator + file).toPath());
         } catch (IOException e) {
             resByte = ("This is default " + code + " Error Page, Please set your custom Error Page").getBytes();
         }

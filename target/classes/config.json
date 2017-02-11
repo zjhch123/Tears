@@ -3,7 +3,7 @@
     "port": "8080",
     "threadPoolSize": "10",
     "serverName": "Tears 1.2 - beta",
-    "staticRootFile": "/Library/WebServer/Documents/netcloud",
+    "staticRootFile": "/Users/zhangjiahao/Desktop/play",
     "defaultCharset": "UTF-8",
     "socketFilter": [
       "com.zjh.tears.filter.socket.HTTPRequestSocketFilter",
@@ -34,7 +34,9 @@
     ]
   },
   "pageConfig": {
-    "defaultIndex": "index.html",
+    "defaultIndex": [
+      "index.html", "page.html"
+    ],
     "errorPages": [
       {
         "code": "404",
