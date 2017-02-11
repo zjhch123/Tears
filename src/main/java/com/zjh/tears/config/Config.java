@@ -7,16 +7,21 @@ import com.zjh.tears.handler.HTTPHandler;
 import com.zjh.tears.listener.socket.HeaderSocketListener;
 import com.zjh.tears.listener.socket.SocketListener;
 import com.zjh.tears.util.ClassParse;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.io.File;
+import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by zhangjiahao on 2017/2/8.
@@ -39,6 +44,10 @@ public final class Config {
 
     public static String DEFAULT_CHARSET;
 
+    public static boolean ACCEPT_CONFIG_USAGE = false;
+    public static Set<File> ACCEPT_FILE = new HashSet<>();
+    public static Set<File> EXCEPT_FILE = new HashSet<>();
+
     static {
 
         File configFile = new File(Config.class.getClassLoader().getResource("config.json").getFile());
@@ -46,8 +55,10 @@ public final class Config {
             JSONObject config = new JSONObject(Files.readAllLines(configFile.toPath()).stream().collect(Collectors.joining()));
             JSONObject serverConfig = config.getJSONObject("serverConfig");
             JSONObject pageConfig = config.getJSONObject("pageConfig");
+            JSONObject acceptConfig = config.getJSONObject("acceptConfig");
             Config.INIT_SERVER_CONFIG(serverConfig);
             Config.INIT_PAGE_CONFIG(pageConfig);
+            Config.INIT_ACCEPT_CONFIG(acceptConfig);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);
@@ -55,8 +66,6 @@ public final class Config {
             e.printStackTrace();
             System.exit(-1);
         }
-
-
     }
 
     private static final void INIT_SERVER_CONFIG(final JSONObject serverConfig) throws Exception {
@@ -103,6 +112,48 @@ public final class Config {
         for (Object obj : pageConfig.getJSONArray("errorPages")) {
             JSONObject errorPage = (JSONObject) obj;
             Config.ERR_PAGES.put(errorPage.getInt("code"), errorPage.getString("page"));
+        }
+    }
+
+    private static final void INIT_ACCEPT_CONFIG(final JSONObject acceptConfig) {
+        Config.ACCEPT_CONFIG_USAGE = acceptConfig.optBoolean("usage", false);
+        if(Config.ACCEPT_CONFIG_USAGE) {
+            JSONArray accept = acceptConfig.getJSONArray("accept");
+            JSONArray except = acceptConfig.getJSONArray("except");
+            Config.initFile(true, accept);
+            Config.initFile(false, except);
+        }
+    }
+
+    private static void initFile(boolean isAccept, JSONArray fileList) {
+        String staticRootFile = Config.STATIC_ROOT_FILE;
+        for (Object obj : fileList) {
+            String file = (String) obj;
+            int level = file.split("/").length - 1;
+            String path = staticRootFile + file.replaceAll("\\*\\*", "\\*").replaceAll("\\.", "\\\\.").replaceAll("\\*", "\\\\b((?!\\\\.).)+\\\\b");
+            findFile(isAccept, new File(staticRootFile), path, level, 1);
+        }
+    }
+
+    private static void findFile(boolean isAccept, File file, String pattern, int level, int nowLevel) {
+        if (level == nowLevel) {
+            Pattern p = Pattern.compile(pattern);
+            Stream.of(file.listFiles())
+                    .filter(f -> !f.isDirectory())
+                    .filter(f -> p.matcher(f.getAbsolutePath()).matches())
+                    .forEach(f -> {
+                        if (isAccept) {
+                            Config.ACCEPT_FILE.add(f);
+                        } else {
+                            Config.EXCEPT_FILE.add(f);
+                        }
+                    });
+        } else if (nowLevel < level) {
+            Stream.of(file.listFiles())
+                    .filter(File::isDirectory)
+                    .forEach(f -> Config.findFile(isAccept, f, pattern, level, nowLevel + 1));
+        } else {
+            System.out.println("error");
         }
     }
 }

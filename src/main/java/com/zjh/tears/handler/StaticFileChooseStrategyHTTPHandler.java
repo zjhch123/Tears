@@ -7,7 +7,7 @@ import com.zjh.tears.model.Response;
 /**
  * Created by zhangjiahao on 2017/2/10.
  */
-public class StaticFileStrategyHTTPHandler extends HTTPHandler {
+public class StaticFileChooseStrategyHTTPHandler extends HTTPHandler {
     @Override
     public void doWithRequest(Request req, Response res) throws HTTPException {
         if(res.getCode() == 200) {
