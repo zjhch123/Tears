@@ -8,12 +8,11 @@ import com.zjh.tears.model.SocketObject;
 public class DebugSocketListener extends SocketListener {
     @Override
     public void preHandler(SocketObject socketObject) {
-        System.out.println("*** debug socket listener pre ***");
+        System.out.println("*** request ***\n" + socketObject.getRequest().getRequestSource());
     }
 
     @Override
     public void afterHandler(SocketObject socketObject) {
-        System.out.println("*** debug socket listener after ***");
+        System.out.println("*** response ***\n" + new String(socketObject.getResponseSource()));
     }
-
 }

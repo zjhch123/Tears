@@ -3,6 +3,7 @@ package com.zjh.tears.factory;
 
 import com.zjh.tears.model.HTTPMethod;
 import com.zjh.tears.model.Request;
+import com.zjh.tears.model.SocketObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,10 +43,9 @@ public class RequestFactory {
         req.setBody(line);
     }
 
-    public Request create(String requestSource) {
-        Request request = new Request();
-        request.setRequestSource(requestSource);
-        String[] analyStringArray = requestSource.split("\n");
+    public Request create(SocketObject socketObject) {
+        Request request = socketObject.getRequest();
+        String[] analyStringArray = request.getRequestSource().split("\n");
         String firstLine = analyStringArray[0];
         StringBuilder headersBuilder = new StringBuilder();
         StringBuilder bodyBuilder = new StringBuilder();

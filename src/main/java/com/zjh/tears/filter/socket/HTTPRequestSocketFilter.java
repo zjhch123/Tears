@@ -9,10 +9,10 @@ import com.zjh.tears.model.SocketObject;
 public class HTTPRequestSocketFilter extends SocketFilter {
     @Override
     public void execute(SocketObject socketObject) throws FilterException {
-        if(socketObject.getRequestSource() == null) {
+        if(socketObject.getRequest().getRequestSource() == null || socketObject.getRequest().getRequestSource().length() == 0) {
             throw new FilterException();
         }
-        String firstLine = socketObject.getRequestSource().split("\n")[0];
+        String firstLine = socketObject.getRequest().getRequestSource().split("\n")[0];
         if(firstLine == null) {
             throw new FilterException();
         }

@@ -2,16 +2,14 @@
   "serverConfig": {
     "port": "8080",
     "threadPoolSize": "10",
-    "serverName": "Tears 1.2 - beta",
+    "serverName": "Tears 1.3 - beta",
     "staticRootFile": "/Users/zhangjiahao/Desktop/play",
     "defaultCharset": "UTF-8",
     "socketFilter": [
-      "com.zjh.tears.filter.socket.HTTPRequestSocketFilter",
-      "com.zjh.tears.filter.socket.TestSocketFilter"
+      "com.zjh.tears.filter.socket.HTTPRequestSocketFilter"
     ],
     "socketListener": [
-      "com.zjh.tears.listener.socket.DebugSocketListener",
-      "com.zjh.tears.listener.socket.TestSocketListener"
+      "com.zjh.tears.listener.socket.LogSocketListener"
     ],
     "httpHandler": [
       "com.zjh.tears.handler.DefaultIndexHTTPHandler",
@@ -36,7 +34,8 @@
   },
   "pageConfig": {
     "defaultIndex": [
-      "index.html", "page.html"
+      "index.html",
+      "page.html"
     ],
     "errorPages": [
       {

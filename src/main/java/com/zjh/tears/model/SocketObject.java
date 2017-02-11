@@ -15,9 +15,8 @@ public class SocketObject {
     private OutputStream os;
     private BufferedReader br;
 
-    private String requestSource;
-
-    private byte[] responseSource;
+    private Request request;
+    private Response response;
 
     public SocketObject(Socket socket) {
         this.socket = socket;
@@ -25,10 +24,6 @@ public class SocketObject {
 
     public Socket getSocket() {
         return this.socket;
-    }
-
-    public String getRequestSource() {
-        return this.requestSource;
     }
 
     public BufferedReader openBufferedReader() throws IOException {
@@ -71,7 +66,7 @@ public class SocketObject {
             char ch = (char) br.read();
             sb.append(ch);
         }
-        this.requestSource = sb.toString();
+        this.getRequest().setRequestSource(sb.toString());
     }
 
     public void response(byte[] data) throws IOException {
@@ -100,12 +95,20 @@ public class SocketObject {
         }
     }
 
-    public void setResponseSource(byte[] responseSource) {
-        this.responseSource = responseSource;
+    public void setResponse(Response res) {
+        this.response = res;
+    }
+    public Response getResponse() {
+        return this.response;
+    }
+    public void setRequest(Request req) {this.request = req;}
+    public Request getRequest() {
+        if(this.request == null)
+            this.request = new Request();
+        return this.request;
     }
 
     public byte[] getResponseSource() {
-        return responseSource;
+        return this.response.getBytes();
     }
-
 }

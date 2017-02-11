@@ -3,6 +3,8 @@ package com.zjh.tears.process;
 import com.zjh.tears.exception.FilterException;
 import com.zjh.tears.manager.SocketChainManager;
 import com.zjh.tears.model.SocketObject;
+import com.zjh.tears.util.Util;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -14,6 +16,8 @@ public class SocketProcess {
 
     private Socket socket;
     private HTTPProcess httpProcess;
+
+    private Logger logger = Logger.getLogger(this.getClass());
 
     public SocketProcess(Socket socket) {
         this.socket = socket;
@@ -28,9 +32,9 @@ public class SocketProcess {
             byte[] res = httpProcess.getResponse(socketObject);
             socketObject.response(res);
         } catch (IOException e){
-            e.printStackTrace();
+            logger.warn(Util.stackTraceToString(e));
         } catch (FilterException e) {
-            socketObject.destory();
+            // logger.warn(Util.stackTraceToString(e)); 这里还没想好怎么处理
         } finally {
             socketObject.destory();
         }

@@ -9,6 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by zhangjiahao on 2017/2/8.
@@ -42,6 +44,10 @@ public class Util {
 
     public static String getGMTString() {
         return Util.getGMTString(new Date());
+    }
+
+    public static String stackTraceToString(Throwable e) {
+        return Stream.of(e.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.joining("\n"));
     }
 
     public static void closeFileInputStream(FileInputStream fis) {
