@@ -11,7 +11,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.io.File;
 import java.util.stream.Collectors;
@@ -29,7 +31,7 @@ public final class Config {
 
     public static String SERVER_NAME;
 
-    public static String DEFAULT_INDEX;
+    public static List<String> DEFAULT_INDEX = new ArrayList<>();
     public static Map<Integer, String> ERR_PAGES = new HashMap<>();
     public static Map<String, String> STATIC_FILE_STRATEGYS = new HashMap<>();
 
@@ -38,28 +40,6 @@ public final class Config {
     public static String DEFAULT_CHARSET;
 
     static {
-        // ERR_PAGES.put(403, "403.html");
-        // ERR_PAGES.put(404, "404.html");
-        // ERR_PAGES.put(500, "500.html");
-
-        // STATIC_FILE_STRATEGYS.put("200", "com.zjh.tears.strategy.DefaultCode200Strategy");
-        // STATIC_FILE_STRATEGYS.put("206", "com.zjh.tears.strategy.DefaultCode206Strategy");
-
-
-        // SOCKET_FILTER_HEADER.setNext(new HTTPRequestSocketFilter());
-
-        // SOCKET_LISTENER_HEADER.setNext(new DebugSocketListener());
-
-        // HTTPHandler defaultIndex = new DefaultIndexHTTPHandler();
-        // HTTPHandler fileExist = new FileExistHTTPHandler();
-        // HTTPHandler responseCode = new ResponseCodeHTTPHandler();
-        // HTTPHandler staticFile = new StaticFileHTTPHandler();
-        // HTTPHandler responseHeader = new ResponseHeaderHTTPHandler();
-        // HTTP_HANDLER_HEADER.setNext(defaultIndex);
-        // defaultIndex.setNext(fileExist);
-        // fileExist.setNext(responseCode);
-        // responseCode.setNext(staticFile);
-        // staticFile.setNext(responseHeader);
 
         File configFile = new File(Config.class.getClassLoader().getResource("config.json").getFile());
         try {
@@ -116,10 +96,13 @@ public final class Config {
     }
 
     private static final void INIT_PAGE_CONFIG(final JSONObject pageConfig) {
-        Config.DEFAULT_INDEX = pageConfig.getString("defaultIndex");
+        for(Object obj : pageConfig.getJSONArray("defaultIndex")) {
+            String index = (String) obj;
+            Config.DEFAULT_INDEX.add(index);
+        }
         for (Object obj : pageConfig.getJSONArray("errorPages")) {
             JSONObject errorPage = (JSONObject) obj;
-            ERR_PAGES.put(errorPage.getInt("code"), errorPage.getString("page"));
+            Config.ERR_PAGES.put(errorPage.getInt("code"), errorPage.getString("page"));
         }
     }
 }
