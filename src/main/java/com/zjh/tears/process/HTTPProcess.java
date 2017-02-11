@@ -30,9 +30,9 @@ public class HTTPProcess {
     }
 
     public byte[] process(SocketObject socketObject) {
-        Request request = requestFactory.create(socketObject.getRequestSource());
+        Request request = requestFactory.create(socketObject);
         Response response = this.responseProcess.getResponse(request);
-        socketObject.setResponseSource(response.getBytes());
-        return socketObject.getResponseSource();
+        socketObject.setResponse(response);
+        return socketObject.getResponse().getBytes();
     }
 }
