@@ -10,7 +10,9 @@ import com.zjh.tears.model.Response;
 public class StaticFileChooseStrategyHTTPHandler extends HTTPHandler {
     @Override
     public void doWithRequest(Request req, Response res) throws HTTPException {
-        if(res.getCode() == 200) {
+        if(req.getRealPath().endsWith("jsp")) { // 此处假装读取配置文件
+            req.setHandlerStrategyName("ReverseProxy");
+        } else if(res.getCode() == 200) {
             req.setHandlerStrategyName("200");
         } else if(res.getCode() == 206) {
             req.setHandlerStrategyName("206");

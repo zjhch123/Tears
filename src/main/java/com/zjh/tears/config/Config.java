@@ -57,7 +57,7 @@ logger.debug("Load Config File...");
         File configFile = new File(Config.class.getClassLoader().getResource("config.json").getFile());
         try {
 long startTime = System.currentTimeMillis();
-            logger.debug("\n  _____   _____       ___   _____    _____  \n" +
+logger.debug("\n  _____   _____       ___   _____    _____  \n" +
                     "|_   _| | ____|     /   | |  _  \\  /  ___/ \n" +
                     "  | |   | |__      / /| | | |_| |  | |___  \n" +
                     "  | |   |  __|    / / | | |  _  /  \\___  \\ \n" +
