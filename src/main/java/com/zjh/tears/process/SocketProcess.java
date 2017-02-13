@@ -31,10 +31,12 @@ public class SocketProcess {
             socketObject.read();
             byte[] res = httpProcess.getResponse(socketObject);
             socketObject.response(res);
+        } catch (java.net.SocketException e) {
+            // 这里有时会报Broken pipe错误, 暂时没想好如何解决
         } catch (IOException e){
             logger.warn(Util.stackTraceToString(e));
         } catch (FilterException e) {
-            // logger.warn(Util.stackTraceToString(e)); 这里还没想好怎么处理
+            logger.warn(e.getMessage());
         } finally {
             socketObject.destory();
         }

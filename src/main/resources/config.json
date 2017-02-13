@@ -2,8 +2,8 @@
   "serverConfig": {
     "port": "8080",
     "threadPoolSize": "10",
-    "serverName": "Tears 1.3 - beta",
-    "staticRootFile": "/Users/zhangjiahao/Desktop/play",
+    "serverName": "Tears 1.4 - beta",
+    "staticRootFile": "/Users/zhangjiahao/Desktop/Tools/tomcat/webapps/temp",
     "defaultCharset": "UTF-8",
     "socketFilter": [
       "com.zjh.tears.filter.socket.HTTPRequestSocketFilter"
@@ -29,6 +29,10 @@
       {
         "name": "206",
         "strategy": "com.zjh.tears.strategy.DefaultCode206Strategy"
+      },
+      {
+        "name": "ReverseProxy",
+        "strategy": "com.zjh.tears.strategy.ReverseProxyStrategy"
       }
     ]
   },

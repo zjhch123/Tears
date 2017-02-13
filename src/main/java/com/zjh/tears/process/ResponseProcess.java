@@ -5,12 +5,15 @@ import com.zjh.tears.factory.ErrorResponseFactory;
 import com.zjh.tears.manager.HTTPHandlerChainManager;
 import com.zjh.tears.model.Response;
 import com.zjh.tears.model.Request;
+import com.zjh.tears.util.Util;
+import org.apache.log4j.Logger;
 
 /**
  * Created by zhangjiahao on 2017/2/8.
  */
 public class ResponseProcess {
 
+    private Logger logger = Logger.getLogger(this.getClass());
     private HTTPHandlerChainManager httpHandlerChainManager;
     private ErrorResponseFactory errorResponseFactory;
 
@@ -25,8 +28,10 @@ public class ResponseProcess {
             httpHandlerChainManager.doWithRequest(req, response);
         } catch (HTTPException e) {
             response = errorResponseFactory.createErrorPage(e, req);
+            logger.warn(Util.stackTraceToString(e));
         } catch (Exception e) {
             response = errorResponseFactory.create500ErrorPage(req);
+            logger.warn(Util.stackTraceToString(e));
         }
         return response;
     }

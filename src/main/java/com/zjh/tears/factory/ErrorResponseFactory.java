@@ -27,12 +27,12 @@ public class ErrorResponseFactory {
     }
 
     private void setDefaultHeaders(Request req, Response res) {
-        res.getHeaders().put("Content-Length", String.valueOf(res.getBody().length) + "; charset=" + Config.DEFAULT_CHARSET);
-        res.getHeaders().put("Server", Config.SERVER_NAME);
-        res.getHeaders().put("Content-Type", "text/html; charset=" + Config.DEFAULT_CHARSET);
-        res.getHeaders().put("Date", Util.getGMTString());
-        res.getHeaders().put("Accept-Ranges", "bytes");
-        res.getHeaders().put("Connection", "close");
+        res.setHeader("Content-Length", String.valueOf(res.getBody().length) + "; charset=" + Config.DEFAULT_CHARSET);
+        res.setHeader("Server", Config.SERVER_NAME);
+        res.setHeader("Content-Type", "text/html; charset=" + Config.DEFAULT_CHARSET);
+        res.setHeader("Date", Util.getGMTString());
+        res.setHeader("Accept-Ranges", "bytes");
+        res.setHeader("Connection", "close");
     }
 
     public Response createErrorPage(Request req, int code, String message, String file) {

@@ -35,9 +35,9 @@ public class DefaultCode206Strategy implements HTTPStrategy {
             fis.skip(start);
             fis.read(body);
             res.setBody(body);
-            res.getHeaders().put("Content-Range", "bytes " + start + "-" + end + "/" + file.length());
-            res.getHeaders().put("Content-Type", Util.getContentType(file));
-            res.getHeaders().put("Last-Modified", Util.getGMTString(new Date(file.lastModified())));
+            res.setHeader("Content-Range", "bytes " + start + "-" + end + "/" + file.length());
+            res.setHeader("Content-Type", Util.getContentType(file));
+            res.setHeader("Last-Modified", Util.getGMTString(new Date(file.lastModified())));
         } catch (IOException e) {
             throw new ServerException();
         } finally {
