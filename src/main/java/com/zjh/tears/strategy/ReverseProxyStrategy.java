@@ -4,7 +4,9 @@ import com.zjh.tears.config.Config;
 import com.zjh.tears.exception.HTTPException;
 import com.zjh.tears.model.Request;
 import com.zjh.tears.model.Response;
+import com.zjh.tears.util.Util;
 
+import java.io.File;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,6 +14,10 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhangjiahao on 2017/2/12.
@@ -42,11 +48,7 @@ public class ReverseProxyStrategy implements HTTPStrategy {
             }
             body = sb.toString().getBytes();
             res.setBody(body);
-            String contentType = conn.getHeaderField("Content-Type");
-            if(contentType.contains("charset")) {
-                contentType = contentType.substring(0, contentType.indexOf(";charset"));
-            }
-            res.getHeaders().put("Content-Type", contentType + ";charset=UTF-8");
+            this.setResponseHeaders(req, res, conn);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -55,6 +57,30 @@ public class ReverseProxyStrategy implements HTTPStrategy {
             this.closeBr(br);
             this.closeOs(os);
             this.closeConn(conn);
+        }
+    }
+
+    private void setResponseHeaders(Request req, Response res, HttpURLConnection conn) {
+        Map<String, List<String>> headersFromPorxy = conn.getHeaderFields();
+        headersFromPorxy.forEach((key, value) -> {
+            if (key != null) {
+                res.setHeader(key, value);
+            }
+        });
+
+        if(headersFromPorxy.containsKey("Content-Type")) {
+            String contentType = conn.getHeaderField("Content-Type");
+            if (contentType.contains("charset")) {
+                contentType = contentType.substring(0, contentType.indexOf(";charset"));
+            }
+            res.setHeader("Content-Type", contentType + "; charset=UTF-8");
+        } else {
+            res.setHeader("Content-Type", "text/html; charset=UTF-8");
+        }
+
+        if(headersFromPorxy.containsKey("Set-Cookie")) {
+            List<String> cookies = conn.getHeaderFields().get("Set-Cookie");
+            res.setHeader("Set-Cookie", cookies);
         }
     }
 

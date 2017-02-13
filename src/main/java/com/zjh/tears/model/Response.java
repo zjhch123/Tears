@@ -2,7 +2,9 @@ package com.zjh.tears.model;
 
 import com.zjh.tears.util.Util;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,7 +14,7 @@ public class Response {
     private String version;
     private int code;
     private String message;
-    private Map<String, String> headers = new HashMap<>();
+    private Map<String, List<String>> headers = new HashMap<>();
     private byte[] body;
 
     public byte[] getBytes() {
@@ -26,7 +28,15 @@ public class Response {
 
     private String headersToString() {
         StringBuilder sb = new StringBuilder();
-        headers.forEach((key, value) -> sb.append(key + ":" + value + "\r\n"));
+        headers.forEach((key, value) -> {
+            if(value.size() == 1) {
+                sb.append(key + ":" + value.get(0) + "\r\n");
+            } else {
+                for(String val : value) {
+                    sb.append(key + ":" + val + "\r\n");
+                }
+            }
+        });
         return sb.toString();
     }
 
@@ -54,11 +64,11 @@ public class Response {
         this.message = message;
     }
 
-    public Map<String, String> getHeaders() {
+    public Map<String, List<String>> getHeaders() {
         return headers;
     }
 
-    public void setHeaders(Map<String, String> headers) {
+    public void setHeaders(Map<String, List<String>> headers) {
         this.headers = headers;
     }
 
@@ -69,4 +79,41 @@ public class Response {
     public void setBody(byte[] body) {
         this.body = body;
     }
+
+    /**
+     * setHeader会覆盖原有的Header
+     */
+    public void setHeader(String key, String ... values) {
+        this.setHeader(key, Arrays.asList(values));
+    }
+
+    /**
+     * setHeader会覆盖原有的Header
+     */
+    public void setHeader(String key, List<String> values) {
+        if(this.headers.containsKey(key)) {
+            this.headers.replace(key, values);
+        } else {
+            this.headers.put(key, values);
+        }
+    }
+
+    /**
+     * addHeader会在已有Header的基础上增加
+     */
+    public void addHeader(String key, String ... values) {
+        this.addHeader(key, Arrays.asList(values));
+    }
+
+    /**
+     * addHeader会在已有Header的基础上增加
+     */
+    public void addHeader(String key, List<String> values) {
+        if(this.headers.containsKey(key)) {
+            this.headers.get(key).addAll(values);
+        } else {
+            this.headers.put(key, values);
+        }
+    }
+
 }

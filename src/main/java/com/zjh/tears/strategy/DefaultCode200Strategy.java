@@ -21,8 +21,8 @@ public class DefaultCode200Strategy implements HTTPStrategy {
         try {
             File file = new File(req.getRealPath());
             res.setBody(Files.readAllBytes(file.toPath()));
-            res.getHeaders().put("Content-Type", Util.getContentType(file) + "; charset=" + Config.DEFAULT_CHARSET);
-            res.getHeaders().put("Last-Modified", Util.getGMTString(new Date(file.lastModified())));
+            res.setHeader("Content-Type", Util.getContentType(file) + "; charset=" + Config.DEFAULT_CHARSET);
+            res.setHeader("Last-Modified", Util.getGMTString(new Date(file.lastModified())));
         } catch (IOException e) {
             e.printStackTrace();
             throw new ServerException();
