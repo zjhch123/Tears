@@ -26,4 +26,16 @@ public class SocketChainManager {
         this.socketFilterChain.execute(socketObject);
         return this.socketListenerChain.execute(socketObject, this.target);
     }
+
+    public void destory() {
+        if(socketFilterChain != null) {
+            socketFilterChain.destory();
+            socketFilterChain = null;
+        }
+        if(socketListenerChain != null) {
+            socketListenerChain.destory();
+            socketListenerChain = null;
+        }
+    }
+
 }

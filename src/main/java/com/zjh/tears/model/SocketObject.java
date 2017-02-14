@@ -93,6 +93,8 @@ public class SocketObject {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if(request != null) request.destory();
+        if(response != null) response.destory();
     }
 
     public void setResponse(Response res) {

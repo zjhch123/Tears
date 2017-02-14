@@ -23,4 +23,8 @@ public class HTTPHandlerChain {
         header.execute(req, res);
     }
 
+    public void destory() {
+        header = null;
+    }
+
 }

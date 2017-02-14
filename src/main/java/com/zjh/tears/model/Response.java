@@ -98,21 +98,10 @@ public class Response {
         }
     }
 
-    /**
-     * addHeader会在已有Header的基础上增加
-     */
-    public void addHeader(String key, String ... values) {
-        this.addHeader(key, Arrays.asList(values));
-    }
-
-    /**
-     * addHeader会在已有Header的基础上增加
-     */
-    public void addHeader(String key, List<String> values) {
-        if(this.headers.containsKey(key)) {
-            this.headers.get(key).addAll(values);
-        } else {
-            this.headers.put(key, values);
+    public void destory() {
+        if(headers != null) {
+            headers.clear();
+            headers = null;
         }
     }
 

@@ -21,4 +21,11 @@ public class HTTPHandlerChainManager {
         this.httpHandlerChain.doWithRequest(req, res);
     }
 
+    public void destory() {
+        if(httpHandlerChain != null) {
+            httpHandlerChain.destory();
+            httpHandlerChain = null;
+        }
+    }
+
 }

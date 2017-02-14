@@ -4,9 +4,6 @@ import com.zjh.tears.config.Config;
 import com.zjh.tears.exception.HTTPException;
 import com.zjh.tears.model.Request;
 import com.zjh.tears.model.Response;
-import com.zjh.tears.util.Util;
-
-import java.io.File;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,10 +11,12 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by zhangjiahao on 2017/2/12.
@@ -26,6 +25,22 @@ public class ReverseProxyStrategy implements HTTPStrategy {
 
     String proxyTarget = "http://localhost:8888/temp"; // 假装是从配置文件里读来的
 
+    Map<String, String> cookieMapping = new HashMap<>();
+    {
+        cookieMapping.put("/temp", "/");
+        cookieMapping.put("/temp/", "/");
+    }
+
+
+    /**
+     * 该方法需要重构
+     *  发送HTTP请求不能这样发，这样会造成请求的方法、路径等参数被重写
+     *  收到的session需要能够持久化
+     *  这mapping也太不优雅了
+     * @param req
+     * @param res
+     * @throws HTTPException
+     */
     @Override
     public void doWithStrategy(Request req, Response res) throws HTTPException {
         String target = proxyTarget + req.getPath();
@@ -38,6 +53,7 @@ public class ReverseProxyStrategy implements HTTPStrategy {
             conn.setDoOutput(true);
             conn.setDoInput(true);
             os = conn.getOutputStream();
+            System.out.println(req.getRequestSource());
             os.write(req.getRequestSource().getBytes());
             br = new BufferedReader(new InputStreamReader(conn.getInputStream(), Config.DEFAULT_CHARSET));
             String line;
@@ -80,8 +96,34 @@ public class ReverseProxyStrategy implements HTTPStrategy {
 
         if(headersFromPorxy.containsKey("Set-Cookie")) {
             List<String> cookies = conn.getHeaderFields().get("Set-Cookie");
-            res.setHeader("Set-Cookie", cookies);
+            this.mappingCookie(res, cookies);
         }
+    }
+
+    private void mappingCookie(Response res, List<String> cookies) {
+        List<String> mappingCookie = new ArrayList<>();
+        for(String cookie : cookies) {
+            if(cookie.contains("Path")) {
+                boolean isHTTPOnly = cookie.contains("HttpOnly");
+                String cookieStr = cookie.substring(0, cookie.indexOf("Path="));
+                String path = "/";
+                Pattern p = Pattern.compile("Path=((.*);\\s?|(.*))");
+                Matcher m = p.matcher(cookie);
+                while(m.find()) {
+                    if(m.group(2) == null) {
+                        path = m.group(3);
+                    } else {
+                        path = m.group(2);
+                    }
+                }
+                path = cookieMapping.getOrDefault(path, path);
+                cookieStr = cookieStr + "Path=" + path + (isHTTPOnly ? "; HttpOnly" : "");
+                mappingCookie.add(cookieStr);
+            } else {
+                mappingCookie.add(cookie);
+            }
+        }
+        res.setHeader("Set-Cookie", mappingCookie);
     }
 
     private void closeConn(HttpURLConnection conn) {

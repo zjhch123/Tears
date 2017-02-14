@@ -1,6 +1,5 @@
 package com.zjh.tears.strategy;
 
-import com.zjh.tears.config.Config;
 import com.zjh.tears.exception.HTTPException;
 import com.zjh.tears.exception.ServerException;
 import com.zjh.tears.model.Request;
@@ -38,6 +37,7 @@ public class DefaultCode206Strategy implements HTTPStrategy {
             res.setHeader("Content-Range", "bytes " + start + "-" + end + "/" + file.length());
             res.setHeader("Content-Type", Util.getContentType(file));
             res.setHeader("Last-Modified", Util.getGMTString(new Date(file.lastModified())));
+            res.setHeader("Connection", "close");
         } catch (IOException e) {
             throw new ServerException();
         } finally {

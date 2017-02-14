@@ -91,4 +91,11 @@ public class Request {
     public void setHandlerStrategyName(String handlerStrategyName) {
         this.handlerStrategyName = handlerStrategyName;
     }
+
+    public void destory() {
+        if(headers != null) {
+            headers.clear();
+            headers = null;
+        }
+    }
 }

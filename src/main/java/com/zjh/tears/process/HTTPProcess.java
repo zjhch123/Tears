@@ -13,11 +13,9 @@ import com.zjh.tears.model.SocketObject;
 public class HTTPProcess {
 
     private SocketChainManager socketChainManager;
-    private RequestFactory requestFactory;
     private ResponseProcess responseProcess;
 
     public HTTPProcess() {
-        this.requestFactory = RequestFactory.getInstance();
         this.responseProcess = new ResponseProcess();
     }
 
@@ -30,9 +28,21 @@ public class HTTPProcess {
     }
 
     public byte[] process(SocketObject socketObject) {
-        Request request = requestFactory.create(socketObject);
+        Request request = RequestFactory.getInstance().create(socketObject);
         Response response = this.responseProcess.getResponse(request);
         socketObject.setResponse(response);
         return socketObject.getResponse().getBytes();
     }
+
+    public void destory() {
+        if(socketChainManager != null) {
+            socketChainManager.destory();
+            socketChainManager = null;
+        }
+        if(responseProcess != null) {
+            responseProcess.destory();
+            responseProcess = null;
+        }
+    }
+
 }

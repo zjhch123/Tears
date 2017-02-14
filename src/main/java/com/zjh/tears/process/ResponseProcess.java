@@ -15,11 +15,9 @@ public class ResponseProcess {
 
     private Logger logger = Logger.getLogger(this.getClass());
     private HTTPHandlerChainManager httpHandlerChainManager;
-    private ErrorResponseFactory errorResponseFactory;
 
     public ResponseProcess() {
         this.httpHandlerChainManager = new HTTPHandlerChainManager();
-        errorResponseFactory = ErrorResponseFactory.getInstance();
     }
 
     public Response getResponse(Request req) {
@@ -27,13 +25,20 @@ public class ResponseProcess {
         try {
             httpHandlerChainManager.doWithRequest(req, response);
         } catch (HTTPException e) {
-            response = errorResponseFactory.createErrorPage(e, req);
+            response = ErrorResponseFactory.getInstance().createErrorPage(e, req);
             logger.warn(Util.stackTraceToString(e));
         } catch (Exception e) {
-            response = errorResponseFactory.create500ErrorPage(req);
+            response = ErrorResponseFactory.getInstance().create500ErrorPage(req);
             logger.warn(Util.stackTraceToString(e));
         }
         return response;
+    }
+
+    public void destory() {
+        if(httpHandlerChainManager != null) {
+            httpHandlerChainManager.destory();
+            httpHandlerChainManager = null;
+        }
     }
 
 }

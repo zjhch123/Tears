@@ -39,6 +39,7 @@ public class SocketProcess {
             logger.warn(e.getMessage());
         } finally {
             socketObject.destory();
+            httpProcess.destory();
         }
     }
 

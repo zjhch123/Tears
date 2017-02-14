@@ -24,4 +24,8 @@ public class SocketFilterChain {
         header.doFilter(socketObject);
     }
 
+    public void destory() {
+        this.header = null;
+    }
+
 }

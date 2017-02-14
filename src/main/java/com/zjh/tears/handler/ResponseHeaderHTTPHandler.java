@@ -16,6 +16,5 @@ public class ResponseHeaderHTTPHandler extends HTTPHandler {
         res.setHeader("Server", Config.SERVER_NAME);
         res.setHeader("Date", Util.getGMTString());
         res.setHeader("Accept-Ranges", "bytes");
-        res.setHeader("Connection", "close");
     }
 }

@@ -23,4 +23,8 @@ public class SocketListenerChain {
         return header.doHandler(socketObject, target);
     }
 
+    public void destory() {
+        this.header = null;
+    }
+
 }

@@ -23,6 +23,7 @@ public class DefaultCode200Strategy implements HTTPStrategy {
             res.setBody(Files.readAllBytes(file.toPath()));
             res.setHeader("Content-Type", Util.getContentType(file) + "; charset=" + Config.DEFAULT_CHARSET);
             res.setHeader("Last-Modified", Util.getGMTString(new Date(file.lastModified())));
+            res.setHeader("Connection", "close");
         } catch (IOException e) {
             e.printStackTrace();
             throw new ServerException();
