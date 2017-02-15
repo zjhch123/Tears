@@ -28,6 +28,7 @@ public class SocketChainManager {
     }
 
     public void destory() {
+        target = null;
         if(socketFilterChain != null) {
             socketFilterChain.destory();
             socketFilterChain = null;
