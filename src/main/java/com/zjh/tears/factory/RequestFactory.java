@@ -54,7 +54,7 @@ public class RequestFactory {
             headersBuilder.append(analyStringArray[index] + "\n");
         }
         for(;index < analyStringArray.length;index++) {
-            bodyBuilder.append(analyStringArray[index] + "\n");
+            bodyBuilder.append(analyStringArray[index]);
         }
         String header = headersBuilder.toString();
         String body = bodyBuilder.toString();

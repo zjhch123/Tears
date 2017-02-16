@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -56,19 +57,20 @@ public class ReverseProxyStrategy implements HTTPStrategy {
             conn.setDoInput(true);
             conn.setUseCaches(false);
             conn.setRequestMethod(req.getMethod().name());
+
             for(Map.Entry<String, String> entry : req.getHeaders().entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue();
                 conn.setRequestProperty(key, value);
             }
 
+            conn.connect();
+
             if(req.getMethod() == HTTPMethod.POST) {
                 os = conn.getOutputStream();
                 os.write(req.getBody().getBytes());
-                os.flush();
             }
 
-            conn.connect();
             br = new BufferedReader(new InputStreamReader(conn.getInputStream(), Config.DEFAULT_CHARSET));
             String line;
             StringBuilder sb = new StringBuilder();
