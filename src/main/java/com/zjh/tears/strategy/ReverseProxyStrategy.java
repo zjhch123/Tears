@@ -2,6 +2,7 @@ package com.zjh.tears.strategy;
 
 import com.zjh.tears.config.Config;
 import com.zjh.tears.exception.HTTPException;
+import com.zjh.tears.model.HTTPMethod;
 import com.zjh.tears.model.Request;
 import com.zjh.tears.model.Response;
 import java.io.BufferedReader;
@@ -49,12 +50,25 @@ public class ReverseProxyStrategy implements HTTPStrategy {
         BufferedReader br = null;
         try {
             URL url = new URL(target);
+
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
             conn.setDoInput(true);
-            os = conn.getOutputStream();
-            System.out.println(req.getRequestSource());
-            os.write(req.getRequestSource().getBytes());
+            conn.setUseCaches(false);
+            conn.setRequestMethod(req.getMethod().name());
+            for(Map.Entry<String, String> entry : req.getHeaders().entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                conn.setRequestProperty(key, value);
+            }
+
+            if(req.getMethod() == HTTPMethod.POST) {
+                os = conn.getOutputStream();
+                os.write(req.getBody().getBytes());
+                os.flush();
+            }
+
+            conn.connect();
             br = new BufferedReader(new InputStreamReader(conn.getInputStream(), Config.DEFAULT_CHARSET));
             String line;
             StringBuilder sb = new StringBuilder();
@@ -62,6 +76,7 @@ public class ReverseProxyStrategy implements HTTPStrategy {
             while((line = br.readLine()) != null) {
                 sb.append(line + "\n");
             }
+
             body = sb.toString().getBytes();
             res.setBody(body);
             this.setResponseHeaders(req, res, conn);
