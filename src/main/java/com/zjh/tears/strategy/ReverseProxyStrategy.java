@@ -36,15 +36,20 @@ public class ReverseProxyStrategy implements HTTPStrategy {
 
 
     private void setResponseHeaders(Request req, Response res, HTTPRequest request) {
-        Map<String, List<String>> headersFromPorxy = request.getResponseHeader();
-        headersFromPorxy.forEach((key, value) -> {
+        String[] firstLine = request.getResponseHeader().get(null).get(0).split(" ");
+        res.setVersion(firstLine[0]);
+        res.setCode(Integer.valueOf(firstLine[1]));
+        res.setMessage(firstLine[2]);
+
+        Map<String, List<String>> headersFromProxy = request.getResponseHeader();
+        headersFromProxy.forEach((key, value) -> {
             if (key != null) {
                 res.setHeader(key, value);
             }
         });
 
-        if(headersFromPorxy.containsKey("Set-Cookie")) {
-            List<String> cookies = headersFromPorxy.get("Set-Cookie");
+        if(headersFromProxy.containsKey("Set-Cookie")) {
+            List<String> cookies = headersFromProxy.get("Set-Cookie");
             this.mappingCookie(req, res, cookies);
         }
     }

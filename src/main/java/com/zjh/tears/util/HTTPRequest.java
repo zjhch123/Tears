@@ -1,8 +1,12 @@
 package com.zjh.tears.util;
 
 import com.zjh.tears.config.Config;
+import com.zjh.tears.exception.HTTPException;
+import com.zjh.tears.exception.NotFoundException;
+import com.zjh.tears.exception.ServerException;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -25,7 +29,7 @@ public class HTTPRequest {
     private HTTPRequest() {
     }
 
-    private static HTTPRequest sendRequest(String method, String target, Map<String, String> headers, byte[] data) {
+    private static HTTPRequest sendRequest(String method, String target, Map<String, String> headers, byte[] data) throws HTTPException {
         HttpURLConnection conn = null;
         BufferedReader br = null;
         OutputStream os = null;
@@ -44,11 +48,11 @@ public class HTTPRequest {
                 }
             }
 
-            if(method.toUpperCase().equals("POST")) {
+            if (method.toUpperCase().equals("POST")) {
                 conn.setDoOutput(true);
                 conn.setUseCaches(false);
                 os = conn.getOutputStream();
-                if(data != null) {
+                if (data != null) {
                     os.write(data);
                     os.flush();
                 }
@@ -71,36 +75,35 @@ public class HTTPRequest {
 
             return request;
         } catch (MalformedURLException e) {
-            e.printStackTrace();
-            request.status = 500;
+            throw new ServerException();
+        } catch(FileNotFoundException e) {
+            throw new NotFoundException();
         } catch (IOException e) {
-            e.printStackTrace();
-            request.status = 500;
+            throw new ServerException();
         } finally {
             HTTPRequest.closeBufferedReader(br);
             HTTPRequest.closeConn(conn);
             HTTPRequest.closeOutputStream(os);
         }
-        return request;
     }
 
-    public static HTTPRequest get(String target, Map<String, String> headers) {
+    public static HTTPRequest get(String target, Map<String, String> headers) throws HTTPException {
         return HTTPRequest.sendRequest("get", target, headers, null);
     }
 
-    public static HTTPRequest get(String target) {
+    public static HTTPRequest get(String target) throws HTTPException {
         return HTTPRequest.get(target, null);
     }
 
-    public static HTTPRequest post(String target, Map<String, String> headers, byte[] data) {
+    public static HTTPRequest post(String target, Map<String, String> headers, byte[] data) throws HTTPException {
         return HTTPRequest.sendRequest("post", target, headers, data);
     }
 
-    public static HTTPRequest post(String target, byte[] data) {
+    public static HTTPRequest post(String target, byte[] data) throws HTTPException {
         return HTTPRequest.post(target, null, data);
     }
 
-    public static HTTPRequest post(String target) {
+    public static HTTPRequest post(String target) throws HTTPException {
         return HTTPRequest.post(target, null, null);
     }
 
