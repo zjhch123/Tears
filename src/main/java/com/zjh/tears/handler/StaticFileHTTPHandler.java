@@ -21,8 +21,9 @@ public class StaticFileHTTPHandler extends HTTPHandler {
         try {
             staticFileStrategy = (HTTPStrategy)parse.getObject(Config.STATIC_FILE_STRATEGYS.get(req.getHandlerStrategyName()));
             staticFileStrategy.doWithStrategy(req, res);
+        } catch (HTTPException e) {
+            throw e;
         } catch (Exception e) {
-            e.printStackTrace();
             throw new ServerException();
         }
     }
