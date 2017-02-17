@@ -34,7 +34,24 @@
         "name": "ReverseProxy",
         "strategy": "com.zjh.tears.strategy.ReverseProxyStrategy"
       }
-    ]
+    ],
+
+    "reverseProxy": {
+      "usage": "true",
+      "proxy": [
+        {
+          "rule": ".*\\.jsp",
+          "target": "http://localhost:8888/temp",
+          "reverseProxyCookie": [
+            {
+              "from": "/temp/",
+              "to": "/"
+            }
+          ]
+        }
+      ]
+    }
+
   },
   "pageConfig": {
     "defaultIndex": [

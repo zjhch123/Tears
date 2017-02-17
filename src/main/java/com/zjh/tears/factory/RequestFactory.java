@@ -45,6 +45,7 @@ public class RequestFactory {
 
     public Request create(SocketObject socketObject) {
         Request request = socketObject.getRequest();
+        request.setRequestIP(socketObject.getSocket().getInetAddress().getHostAddress());
         String[] analyStringArray = request.getRequestSource().split("\n");
         String firstLine = analyStringArray[0];
         StringBuilder headersBuilder = new StringBuilder();

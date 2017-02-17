@@ -9,6 +9,8 @@ import java.util.Map;
  */
 public class Request {
 
+    private String requestIP;
+
     private String requestSource;
     private HTTPMethod method;
     private String path; // 这个path是带参数的
@@ -18,6 +20,9 @@ public class Request {
     private String body;
 
     private String handlerStrategyName;
+
+    private ReverseProxy reverseProxy;
+
 
     @Override
     public String toString() {
@@ -90,6 +95,23 @@ public class Request {
 
     public void setHandlerStrategyName(String handlerStrategyName) {
         this.handlerStrategyName = handlerStrategyName;
+    }
+
+
+    public String getRequestIP() {
+        return requestIP;
+    }
+
+    public void setRequestIP(String requestIP) {
+        this.requestIP = requestIP;
+    }
+
+    public ReverseProxy getReverseProxy() {
+        return reverseProxy;
+    }
+
+    public void setReverseProxy(ReverseProxy reverseProxy) {
+        this.reverseProxy = reverseProxy;
     }
 
     public void destory() {
