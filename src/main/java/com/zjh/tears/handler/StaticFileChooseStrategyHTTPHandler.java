@@ -18,6 +18,8 @@ public class StaticFileChooseStrategyHTTPHandler extends HTTPHandler {
             for(String key : Config.REVERSE_PROXY_MAPPING.keySet()) {
                 Pattern p = Pattern.compile(key);
                 Matcher m = p.matcher(req.getRequestPath());
+                System.out.println(key);
+                System.out.println(req.getRequestPath());
                 if(m.matches()) {
                     req.setReverseProxy(Config.REVERSE_PROXY_MAPPING.get(key));
                     req.setHandlerStrategyName("ReverseProxy");
