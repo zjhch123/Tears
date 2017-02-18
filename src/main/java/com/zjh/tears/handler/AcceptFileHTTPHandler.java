@@ -17,7 +17,6 @@ public class AcceptFileHTTPHandler extends HTTPHandler {
         if(Config.ACCEPT_CONFIG_USAGE) {
             boolean accept = false;
             String path = req.getRequestPath();
-            System.out.println(path);
             for(Pattern p : Config.ACCEPT_FILE) {
                 if(p.matcher(path).matches()) {
                     accept = true;

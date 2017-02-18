@@ -2,7 +2,7 @@
   "serverConfig": {
     "port": "8080",
     "threadPoolSize": "10",
-    "serverName": "Tears 1.4 - beta",
+    "serverName": "Tears 1.4.5",
     "staticRootFile": "/Users/zhangjiahao/Desktop/play",
     "defaultCharset": "UTF-8",
     "socketFilter": [
