@@ -147,7 +147,7 @@ public final class Config {
         if(Config.REVERSE_PROXY_USAGE) {
             for(Object obj : reverseProxy.getJSONArray("proxy")) {
                 JSONObject reverseJSON = (JSONObject) obj;
-                String rule = reverseJSON.getString("rule");
+                String rule = "/" + reverseJSON.getString("rule").replaceAll("\\.", "\\\\.").replaceAll("\\*", "((?![\\\\./]).)*");
                 String target = reverseJSON.getString("target");
                 ReverseProxy reverseProxyObj = new ReverseProxy(rule, target);
                 for(Object reverseProxyCookieObj : reverseJSON.getJSONArray("reverseProxyCookie")) {

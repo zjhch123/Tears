@@ -39,7 +39,7 @@
       "usage": "true",
       "proxy": [
         {
-          "rule": ".*\\.jsp",
+          "rule": "*.jsp",
           "target": "http://localhost:8888/temp",
           "reverseProxyCookie": [
             {
