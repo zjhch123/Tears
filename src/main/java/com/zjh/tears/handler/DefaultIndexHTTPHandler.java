@@ -17,6 +17,7 @@ public class DefaultIndexHTTPHandler extends HTTPHandler {
                 String path = req.getRealPath() + File.separator + file;
                 if(new File(path).exists()) {
                     req.setRealPath(path);
+                    req.setRequestPath(req.getRequestPath() + File.separator + file);
                     break;
                 }
             }
