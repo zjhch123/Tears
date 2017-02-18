@@ -52,8 +52,8 @@ public final class Config {
     public static String DEFAULT_CHARSET;
 
     public static boolean ACCEPT_CONFIG_USAGE = false;
-    public static Set<File> ACCEPT_FILE = new HashSet<>();
-    public static Set<File> EXCEPT_FILE = new HashSet<>();
+    public static Set<Pattern> ACCEPT_FILE = new HashSet<>();
+    public static Set<Pattern> EXCEPT_FILE = new HashSet<>();
 
     private static Logger logger = Logger.getLogger(Config.class);
 
@@ -190,34 +190,14 @@ public final class Config {
     }
 
     private static void initFile(boolean isAccept, JSONArray fileList) {
-        String staticRootFile = Config.STATIC_ROOT_FILE;
         for (Object obj : fileList) {
             String file = (String) obj;
-            int level = file.split("/").length - 1;
-            String path = staticRootFile + file.replaceAll("\\*\\*", "\\*").replaceAll("\\.", "\\\\.").replaceAll("\\*", "\\\\b((?!\\\\.).)+\\\\b");
-            findFile(isAccept, new File(staticRootFile), path, level, 1);
-        }
-    }
-
-    private static void findFile(boolean isAccept, File file, String pattern, int level, int nowLevel) {
-        if (level == nowLevel) {
-            Pattern p = Pattern.compile(pattern);
-            Stream.of(file.listFiles())
-                    .filter(f -> !f.isDirectory())
-                    .filter(f -> p.matcher(f.getAbsolutePath()).matches())
-                    .forEach(f -> {
-                        if (isAccept) {
-                            Config.ACCEPT_FILE.add(f);
-                        } else {
-                            Config.EXCEPT_FILE.add(f);
-                        }
-                    });
-        } else if (nowLevel < level) {
-            Stream.of(file.listFiles())
-                    .filter(File::isDirectory)
-                    .forEach(f -> Config.findFile(isAccept, f, pattern, level, nowLevel + 1));
-        } else {
-            System.out.println("error");
+            String path = file.replaceAll("\\.", "\\\\.").replaceAll("\\*", "((?![\\\\./]).)*");
+            if(isAccept) {
+                Config.ACCEPT_FILE.add(Pattern.compile(path));
+            } else{
+                Config.EXCEPT_FILE.add(Pattern.compile(path));
+            }
         }
     }
 

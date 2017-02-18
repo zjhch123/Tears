@@ -33,7 +33,7 @@ public class HTTPRequest {
         HttpURLConnection conn = null;
         BufferedReader br = null;
         OutputStream os = null;
-        HTTPRequest request = new HTTPRequest();
+        HTTPRequest request;
         try {
             URL url = new URL(target);
             conn = (HttpURLConnection) url.openConnection();
