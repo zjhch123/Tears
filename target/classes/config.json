@@ -3,7 +3,7 @@
     "port": "8080",
     "threadPoolSize": "10",
     "serverName": "Tears 1.4 - beta",
-    "staticRootFile": "/Users/zhangjiahao/Desktop/Tools/tomcat/webapps/temp",
+    "staticRootFile": "/Users/zhangjiahao/Desktop/play",
     "defaultCharset": "UTF-8",
     "socketFilter": [
       "com.zjh.tears.filter.socket.HTTPRequestSocketFilter"
@@ -14,7 +14,6 @@
     "httpHandler": [
       "com.zjh.tears.handler.DefaultIndexHTTPHandler",
       "com.zjh.tears.handler.URLDecodeHTTPHandler",
-      "com.zjh.tears.handler.FileExistHTTPHandler",
       "com.zjh.tears.handler.AcceptFileHTTPHandler",
       "com.zjh.tears.handler.ResponseCodeHTTPHandler",
       "com.zjh.tears.handler.StaticFileChooseStrategyHTTPHandler",
@@ -81,7 +80,7 @@
       "/*/*/*.*"
     ],
     "except": [
-      "/config.html"
+      "/config.jsp"
     ]
   }
 }

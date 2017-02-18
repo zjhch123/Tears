@@ -2,6 +2,7 @@ package com.zjh.tears.strategy;
 
 import com.zjh.tears.config.Config;
 import com.zjh.tears.exception.HTTPException;
+import com.zjh.tears.exception.NotFoundException;
 import com.zjh.tears.exception.ServerException;
 import com.zjh.tears.model.Request;
 import com.zjh.tears.model.Response;
@@ -24,8 +25,9 @@ public class DefaultCode200Strategy implements HTTPStrategy {
             res.setHeader("Content-Type", Util.getContentType(file) + "; charset=" + Config.DEFAULT_CHARSET);
             res.setHeader("Last-Modified", Util.getGMTString(new Date(file.lastModified())));
             res.setHeader("Connection", "close");
+        } catch(java.nio.file.NoSuchFileException|java.io.FileNotFoundException e) {
+            throw new NotFoundException();
         } catch (IOException e) {
-            e.printStackTrace();
             throw new ServerException();
         }
     }

@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 public class ReverseProxyStrategy implements HTTPStrategy {
 
     /**
-     *  这mapping也太不优雅了
+     *  这mapping也太不优雅了  // 其实蛮优雅的啊！
      */
     @Override
     public void doWithStrategy(Request req, Response res) throws HTTPException {
@@ -35,23 +35,19 @@ public class ReverseProxyStrategy implements HTTPStrategy {
     }
 
 
-    private void setResponseHeaders(Request req, Response res, HTTPRequest request) {
-        String[] firstLine = request.getResponseHeader().get(null).get(0).split(" ");
+    public void initFirstLine(Response res, String line) {
+        String[] firstLine = line.split(" ");
         res.setVersion(firstLine[0]);
         res.setCode(Integer.valueOf(firstLine[1]));
         res.setMessage(firstLine[2]);
+    }
 
-        Map<String, List<String>> headersFromProxy = request.getResponseHeader();
+    public void mappingHeaders(Response res, Map<String, List<String>> headersFromProxy) {
         headersFromProxy.forEach((key, value) -> {
             if (key != null) {
                 res.setHeader(key, value);
             }
         });
-
-        if(headersFromProxy.containsKey("Set-Cookie")) {
-            List<String> cookies = headersFromProxy.get("Set-Cookie");
-            this.mappingCookie(req, res, cookies);
-        }
     }
 
     private void mappingCookie(Request req, Response res, List<String> cookies) {
@@ -79,6 +75,19 @@ public class ReverseProxyStrategy implements HTTPStrategy {
             }
         }
         res.setHeader("Set-Cookie", mappingCookie);
+    }
+
+    private void setResponseHeaders(Request req, Response res, HTTPRequest request) {
+        String firstLine = request.getResponseHeader().get(null).get(0);
+        this.initFirstLine(res, firstLine);
+
+        Map<String, List<String>> headersFromProxy = request.getResponseHeader();
+        this.mappingHeaders(res, headersFromProxy);
+
+        if(headersFromProxy.containsKey("Set-Cookie")) {
+            List<String> cookies = headersFromProxy.get("Set-Cookie");
+            this.mappingCookie(req, res, cookies);
+        }
     }
 
 }

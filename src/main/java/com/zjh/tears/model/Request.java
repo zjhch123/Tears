@@ -14,7 +14,8 @@ public class Request {
     private String requestSource;
     private HTTPMethod method;
     private String path; // 这个path是带参数的
-    private String realPath; // 这个path是不带参数的
+    private String requestPath; // 这个path是不带参数的
+    private String realPath; // 这个path是不带参数并且映射为真实路径的
     private String version;
     private Map<String, String> headers;
     private String body;
@@ -58,12 +59,17 @@ public class Request {
 
     public void setPath(String path) {
         this.path = path;
+        this.setRequestPath(this.path.contains("?") ? path.split("\\?")[0] : path);
         this.setRealPath(Config.STATIC_ROOT_FILE + (this.path.contains("?") ? path.split("\\?")[0] : path));
     }
 
     public String getRealPath() {return this.realPath;}
 
     public void setRealPath(String realPath) {this.realPath = realPath;}
+
+    public String getRequestPath() {return this.requestPath;}
+
+    public void setRequestPath(String path) {this.requestPath = path;}
 
     public String getVersion() {
         return version;
