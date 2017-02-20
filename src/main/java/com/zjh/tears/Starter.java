@@ -7,6 +7,7 @@ import com.zjh.tears.config.Config;
  */
 public class Starter {
     public static void main(String[] args) {
-        new Server(Config.PORT, Config.THREAD_POOL_SIZE).start();
+        Server runServer = new Server(Config.PORT, Config.THREAD_POOL_SIZE);
+        runServer.start();
     }
 }

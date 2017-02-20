@@ -110,6 +110,10 @@ public class SocketObject {
         return this.request;
     }
 
+    public String getRequestSource() {
+        return this.request.getRequestSource();
+    }
+
     public byte[] getResponseSource() {
         return this.response.getBytes();
     }
