@@ -8,6 +8,12 @@ import com.zjh.tears.config.Config;
 public class Starter {
     public static void main(String[] args) {
         Server runServer = new Server(Config.PORT, Config.THREAD_POOL_SIZE);
-        runServer.start();
+        Runnable run = () -> runServer.start();
+
+        ShutdownServer shutdownServer = new ShutdownServer(8008, runServer);
+        Runnable shutdown = () -> shutdownServer.start();
+
+        new Thread(run).start();
+        new Thread(shutdown).start();
     }
 }

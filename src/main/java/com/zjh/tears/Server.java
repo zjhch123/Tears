@@ -17,16 +17,26 @@ public class Server {
     private int threadPoolSize;
     private ExecutorService threadPool;
 
+    private boolean flag = true;
+
+    public Server(int port) {
+        this.port = port;
+    }
+
     public Server(int port, int threadPoolSize) {
         this.port = port;
         this.threadPoolSize = threadPoolSize;
         this.threadPool = Executors.newFixedThreadPool(this.threadPoolSize);
     }
 
+    public int getPort() {
+        return port;
+    }
+
     public void start() {
         try {
             ServerSocket serverSocket = new ServerSocket(this.port);
-            while (true) {
+            while (this.flag) {
                 Socket socket = serverSocket.accept();
                 threadPool.execute(() -> new SocketProcess(socket).process());
             }
@@ -36,6 +46,7 @@ public class Server {
     }
 
     public void destory() {
+        this.flag = false;
         this.threadPool.shutdownNow();
     }
 
