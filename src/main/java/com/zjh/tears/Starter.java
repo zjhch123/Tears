@@ -9,7 +9,7 @@ public class Starter {
     public static void main(String[] args) {
         Server runServer = new Server(Config.PORT, Config.THREAD_POOL_SIZE);
         Runnable run = () -> runServer.start();
-        ShutdownServer shutdownServer = new ShutdownServer(Config.SHUTDOWN_PORT, runServer);
+        ShutdownServer shutdownServer = new ShutdownServer(8008, runServer);
         Runnable shutdown = () -> shutdownServer.start();
 
         new Thread(run).start();

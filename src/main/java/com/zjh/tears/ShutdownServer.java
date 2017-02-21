@@ -26,7 +26,7 @@ public class ShutdownServer extends Server {
             while(flag) {
                 SocketObject shutdown = new SocketObject(serverSocket.accept());
                 shutdown.read();
-                if(Config.SHUTDOWN_SECRET.equals(shutdown.getRequestSource().replaceAll("\n|\r|\t",""))) {
+                if("shutdown".equals(shutdown.getRequestSource().replaceAll("\n|\r|\t",""))) {
                     server.destory();
                     shutdown.destory();
                     flag = false;

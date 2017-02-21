@@ -51,9 +51,6 @@ public final class Config {
 
     public static String DEFAULT_CHARSET;
 
-    public static int SHUTDOWN_PORT;
-    public static String SHUTDOWN_SECRET;
-
     public static boolean ACCEPT_CONFIG_USAGE = false;
     public static Set<Pattern> ACCEPT_FILE = new HashSet<>();
     public static Set<Pattern> EXCEPT_FILE = new HashSet<>();
@@ -101,10 +98,9 @@ public final class Config {
         Config.THREAD_POOL_SIZE = serverConfig.getInt("threadPoolSize");
         logger.debug("server thread pool size - " + Config.THREAD_POOL_SIZE);
 
-        Config.SHUTDOWN_PORT = serverConfig.getInt("shutdownPort");
-        logger.debug("server shutdown port - " + Config.SHUTDOWN_PORT);
-        Config.SHUTDOWN_SECRET = serverConfig.getString("shutdownSecret");
-        logger.debug("server shutdown secret - " + Config.SHUTDOWN_SECRET);
+        logger.debug("server shutdown port - 8008");
+
+        logger.debug("server shutdown secret - shutdown");
 
         Config.SERVER_NAME = serverConfig.getString("serverName");
         logger.debug("server name - " + Config.SERVER_NAME);
