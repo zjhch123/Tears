@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by zhangjiahao on 2017/2/7.
@@ -54,7 +55,6 @@ public class Server {
 
     public void destory() {
         this.flag = false;
-        this.threadPool.shutdownNow();
         try {
             Socket socket = new Socket("localhost", this.port);
             this.serverSocket.close();
@@ -62,6 +62,13 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.threadPool.shutdown();
+        try {
+            if(!this.threadPool.awaitTermination(10, TimeUnit.MILLISECONDS)) {
+                this.threadPool.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            this.threadPool.shutdownNow();
+        }
     }
-
 }
