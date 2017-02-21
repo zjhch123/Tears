@@ -51,8 +51,6 @@
       ]
     },
 
-    "shutdownPort": "8008",
-    "shutdownSecret": "shutdown"
   },
   "pageConfig": {
     "defaultIndex": [
