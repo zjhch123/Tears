@@ -51,6 +51,9 @@ public final class Config {
 
     public static String DEFAULT_CHARSET;
 
+    public static int SHUTDOWN_PORT;
+    public static String SHUTDOWN_SECRET;
+
     public static boolean ACCEPT_CONFIG_USAGE = false;
     public static Set<Pattern> ACCEPT_FILE = new HashSet<>();
     public static Set<Pattern> EXCEPT_FILE = new HashSet<>();
@@ -94,16 +97,27 @@ public final class Config {
     private static final void INIT_SERVER_CONFIG(final JSONObject serverConfig) throws Exception {
         Config.PORT = serverConfig.getInt("port");
         logger.debug("server port - " + Config.PORT);
+
         Config.THREAD_POOL_SIZE = serverConfig.getInt("threadPoolSize");
         logger.debug("server thread pool size - " + Config.THREAD_POOL_SIZE);
+
+        Config.SHUTDOWN_PORT = serverConfig.getInt("shutdownPort");
+        logger.debug("server shutdown port - " + Config.SHUTDOWN_PORT);
+        Config.SHUTDOWN_SECRET = serverConfig.getString("shutdownSecret");
+        logger.debug("server shutdown secret - " + Config.SHUTDOWN_SECRET);
+
         Config.SERVER_NAME = serverConfig.getString("serverName");
         logger.debug("server name - " + Config.SERVER_NAME);
+
         Config.STATIC_ROOT_FILE = serverConfig.getString("staticRootFile");
         logger.debug("static root file - " + Config.STATIC_ROOT_FILE);
+
         Config.DEFAULT_CHARSET = serverConfig.getString("defaultCharset");
         logger.debug("default charset - " + Config.DEFAULT_CHARSET);
+
         SocketFilter headerFilter = Config.SOCKET_FILTER_HEADER;
         logger.debug("Init Socket Filter...");
+
         for (Object obj : serverConfig.getJSONArray("socketFilter")) {
             String className = (String) obj;
             logger.debug("init class - " + className);
@@ -112,8 +126,10 @@ public final class Config {
             headerFilter = filter;
         }
         logger.debug("Init Socket Filter SUCCESS!");
+
         SocketListener headerListener = Config.SOCKET_LISTENER_HEADER;
         logger.debug("Init Socket Listener...");
+
         for (Object obj : serverConfig.getJSONArray("socketListener")) {
             String className = (String) obj;
             logger.debug("init class - " + className);
@@ -122,8 +138,10 @@ public final class Config {
             headerListener = listener;
         }
         logger.debug("Init Socket Listener SUCCESS!");
+
         HTTPHandler headerHandler = Config.HTTP_HANDLER_HEADER;
         logger.debug("Init HTTP Handler...");
+
         for (Object obj : serverConfig.getJSONArray("httpHandler")) {
             String className = (String) obj;
             logger.debug("init class - " + className);
@@ -132,6 +150,7 @@ public final class Config {
             headerHandler = handler;
         }
         logger.debug("Init HTTP Handler SUCCESS!");
+
         logger.debug("Init Static File Strategy...");
         for (Object obj : serverConfig.getJSONArray("staticFileStrategy")) {
             JSONObject strategy = (JSONObject) obj;
@@ -140,6 +159,7 @@ public final class Config {
             logger.debug("init strategy - " + strategyName + ", class - " + strategyClass);
             STATIC_FILE_STRATEGYS.put(strategyName, strategyClass);
         }
+        logger.debug("Init Static File Strategy SUCCESS!");
 
         JSONObject reverseProxy = serverConfig.getJSONObject("reverseProxy");
         Config.REVERSE_PROXY_USAGE = reverseProxy.optBoolean("usage");

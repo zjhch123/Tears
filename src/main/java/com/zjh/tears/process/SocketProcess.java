@@ -13,7 +13,7 @@ import java.net.Socket;
 /**
  * Created by zhangjiahao on 2017/2/7.
  */
-public class SocketProcess {
+public class SocketProcess implements Runnable {
 
     private Socket socket;
     private HTTPProcess httpProcess;
@@ -44,4 +44,8 @@ public class SocketProcess {
         }
     }
 
+    @Override
+    public void run() {
+        process();
+    }
 }

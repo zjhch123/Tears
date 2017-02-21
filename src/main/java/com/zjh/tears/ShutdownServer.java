@@ -1,5 +1,6 @@
 package com.zjh.tears;
 
+import com.zjh.tears.config.Config;
 import com.zjh.tears.model.SocketObject;
 
 import java.io.IOException;
@@ -25,9 +26,11 @@ public class ShutdownServer extends Server {
             while(flag) {
                 SocketObject shutdown = new SocketObject(serverSocket.accept());
                 shutdown.read();
-                if("shutdown".equals(shutdown.getRequestSource())) {
+                if(Config.SHUTDOWN_SECRET.equals(shutdown.getRequestSource().replaceAll("\n|\r|\t",""))) {
                     server.destory();
+                    shutdown.destory();
                     flag = false;
+                    serverSocket.close();
                 }
             }
         } catch (IOException e) {

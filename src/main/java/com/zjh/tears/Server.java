@@ -1,6 +1,7 @@
 package com.zjh.tears;
 
 import com.zjh.tears.process.SocketProcess;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,8 +14,11 @@ import java.util.concurrent.Executors;
  */
 public class Server {
 
+    private Logger logger = Logger.getLogger(this.getClass());
+
     private int port;
     private int threadPoolSize;
+    private ServerSocket serverSocket;
     private ExecutorService threadPool;
 
     private boolean flag = true;
@@ -35,19 +39,29 @@ public class Server {
 
     public void start() {
         try {
-            ServerSocket serverSocket = new ServerSocket(this.port);
+            this.serverSocket = new ServerSocket(this.port);
             while (this.flag) {
                 Socket socket = serverSocket.accept();
-                threadPool.execute(() -> new SocketProcess(socket).process());
+                if(!threadPool.isShutdown())
+                    threadPool.execute(new SocketProcess(socket));
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+        logger.debug("Bye~");
     }
 
     public void destory() {
         this.flag = false;
         this.threadPool.shutdownNow();
+        try {
+            Socket socket = new Socket("localhost", this.port);
+            this.serverSocket.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
