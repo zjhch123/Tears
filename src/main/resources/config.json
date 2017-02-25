@@ -2,7 +2,7 @@
   "serverConfig": {
     "port": "8080",
     "threadPoolSize": "10",
-    "serverName": "Tears 1.5.1",
+    "serverName": "Tears 1.5.2",
     "staticRootFile": "/Users/zhangjiahao/Desktop/play",
     "defaultCharset": "UTF-8",
     "socketFilter": [
@@ -20,6 +20,7 @@
       "com.zjh.tears.handler.StaticFileHTTPHandler",
       "com.zjh.tears.handler.ResponseHeaderHTTPHandler"
     ],
+
     "staticFileStrategy": [
       {
         "name": "200",
@@ -49,7 +50,7 @@
           ]
         }
       ]
-    },
+    }
 
   },
   "pageConfig": {

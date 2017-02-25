@@ -24,7 +24,7 @@ public class StaticFileHTTPHandler extends HTTPHandler {
         } catch (HTTPException e) {
             throw e;
         } catch (Exception e) {
-            throw new ServerException();
+            throw new ServerException(e);
         }
     }
 

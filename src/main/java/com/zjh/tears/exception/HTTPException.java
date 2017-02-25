@@ -7,9 +7,12 @@ public class HTTPException extends Exception {
     protected int code;
     protected String errMessage;
 
-    public HTTPException(int code, String errMessage) {
+    public HTTPException(Exception source, int code, String errMessage) {
         this.code = code;
         this.errMessage = errMessage;
+        if(source != null) {
+            this.setStackTrace(source.getStackTrace());
+        }
     }
 
     public int getCode() {

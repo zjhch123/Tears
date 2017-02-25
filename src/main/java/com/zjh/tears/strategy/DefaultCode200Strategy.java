@@ -21,14 +21,17 @@ public class DefaultCode200Strategy implements HTTPStrategy {
     public void doWithStrategy(Request req, Response res) throws HTTPException {
         try {
             File file = new File(req.getRealPath());
+            res.setVersion(req.getVersion());
+            res.setMessage("OK");
+            res.setCode(200);
             res.setBody(Files.readAllBytes(file.toPath()));
             res.setHeader("Content-Type", Util.getContentType(file) + "; charset=" + Config.DEFAULT_CHARSET);
             res.setHeader("Last-Modified", Util.getGMTString(new Date(file.lastModified())));
             res.setHeader("Connection", "close");
         } catch(java.nio.file.NoSuchFileException|java.io.FileNotFoundException e) {
-            throw new NotFoundException();
+            throw new NotFoundException(e);
         } catch (IOException e) {
-            throw new ServerException();
+            throw new ServerException(e);
         }
     }
 }

@@ -5,6 +5,7 @@
     "serverName": "Tears 1.5.1",
     "staticRootFile": "/Users/zhangjiahao/Desktop/play",
     "defaultCharset": "UTF-8",
+    "timeout": 1000,
     "socketFilter": [
       "com.zjh.tears.filter.socket.HTTPRequestSocketFilter"
     ],
@@ -15,7 +16,6 @@
       "com.zjh.tears.handler.DefaultIndexHTTPHandler",
       "com.zjh.tears.handler.URLDecodeHTTPHandler",
       "com.zjh.tears.handler.AcceptFileHTTPHandler",
-      "com.zjh.tears.handler.ResponseCodeHTTPHandler",
       "com.zjh.tears.handler.StaticFileChooseStrategyHTTPHandler",
       "com.zjh.tears.handler.StaticFileHTTPHandler",
       "com.zjh.tears.handler.ResponseHeaderHTTPHandler"
@@ -49,7 +49,7 @@
           ]
         }
       ]
-    },
+    }
 
   },
   "pageConfig": {
@@ -75,6 +75,7 @@
   "acceptConfig": {
     "usage": "true",
     "accept":[
+      "/*",
       "/*.*",
       "/*/*.*",
       "/*/*/*.*"

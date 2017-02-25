@@ -25,9 +25,8 @@ public class StaticFileChooseStrategyHTTPHandler extends HTTPHandler {
                 }
             }
         }
-        if(res.getCode() == 200) {
-            req.setHandlerStrategyName("200");
-        } else if(res.getCode() == 206) {
+
+        if(req.getHeaders().containsKey("Range")) {
             req.setHandlerStrategyName("206");
         } else {
             req.setHandlerStrategyName("200");

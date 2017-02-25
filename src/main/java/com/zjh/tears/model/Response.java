@@ -2,6 +2,7 @@ package com.zjh.tears.model;
 
 import com.zjh.tears.util.Util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +15,7 @@ public class Response {
     private String version;
     private int code;
     private String message;
-    private Map<String, List<String>> headers = new HashMap<>();
+    private Map<String, ArrayList<String>> headers = new HashMap<>();
     private byte[] body;
 
     public byte[] getBytes() {
@@ -64,11 +65,11 @@ public class Response {
         this.message = message;
     }
 
-    public Map<String, List<String>> getHeaders() {
+    public Map<String, ArrayList<String>> getHeaders() {
         return headers;
     }
 
-    public void setHeaders(Map<String, List<String>> headers) {
+    public void setHeaders(Map<String, ArrayList<String>> headers) {
         this.headers = headers;
     }
 
@@ -81,16 +82,39 @@ public class Response {
     }
 
     /**
+     * addHeader会在原有的基础上增加
+     */
+    public void addHeader(String key, String ... values) {
+        this.addHeader(key, Arrays.asList(values));
+    }
+
+    public void addHeader(String key, List<String> values) {
+        this.addHeader(key, new ArrayList<>(values));
+    }
+
+    public void addHeader(String key, ArrayList<String> values) {
+        if(this.headers.containsKey(key)) {
+            this.headers.get(key).addAll(values);
+        } else {
+            this.setHeader(key, values);
+        }
+    }
+
+    /**
      * setHeader会覆盖原有的Header
      */
     public void setHeader(String key, String ... values) {
         this.setHeader(key, Arrays.asList(values));
     }
 
+
+    public void setHeader(String key, List<String> values) {
+        this.setHeader(key, new ArrayList<>(values));
+    }
     /**
      * setHeader会覆盖原有的Header
      */
-    public void setHeader(String key, List<String> values) {
+    public void setHeader(String key, ArrayList<String> values) {
         if(this.headers.containsKey(key)) {
             this.headers.replace(key, values);
         } else {

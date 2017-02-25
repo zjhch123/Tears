@@ -5,6 +5,6 @@ package com.zjh.tears.exception;
  */
 public class PermissionException extends HTTPException {
     public PermissionException() {
-        super(403, "Forbidden");
+        super(null, 403, "Forbidden");
     }
 }

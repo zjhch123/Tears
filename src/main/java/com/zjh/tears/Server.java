@@ -1,5 +1,6 @@
 package com.zjh.tears;
 
+import com.zjh.tears.config.Config;
 import com.zjh.tears.process.SocketProcess;
 import org.apache.log4j.Logger;
 
@@ -41,12 +42,15 @@ public class Server {
     public void start() {
         try {
             this.serverSocket = new ServerSocket(this.port);
+
             while (this.flag) {
                 Socket socket = serverSocket.accept();
+                socket.setSoTimeout(Config.TIMEOUT);
                 if(!threadPool.isShutdown())
                     threadPool.execute(new SocketProcess(socket));
             }
-
+        } catch (java.net.SocketException e) {
+            // Todo 没想好怎么处理
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,9 +60,7 @@ public class Server {
     public void destory() {
         this.flag = false;
         try {
-            Socket socket = new Socket("localhost", this.port);
             this.serverSocket.close();
-            socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -51,7 +51,6 @@ public class ReverseProxyStrategy implements HTTPStrategy {
     }
 
     private void mappingCookie(Request req, Response res, List<String> cookies) {
-        List<String> mappingCookie = new ArrayList<>();
         Map<String, String> cookieMapping = req.getReverseProxy().getCookiesMapping();
         for(final String cookie : cookies) {
             if(cookie.contains("Path")) {
@@ -69,12 +68,11 @@ public class ReverseProxyStrategy implements HTTPStrategy {
                 }
                 String mappingPath = cookieMapping.getOrDefault(path, path);
                 cookieStr = cookieStr + "Path=" + mappingPath + (isHTTPOnly ? "; HttpOnly" : "");
-                mappingCookie.add(cookieStr);
+                res.addHeader("Set-Cookie", cookieStr);
             } else {
-                mappingCookie.add(cookie);
+                res.addHeader("Set-Cookie", cookie);
             }
         }
-        res.setHeader("Set-Cookie", mappingCookie);
     }
 
     private void setResponseHeaders(Request req, Response res, HTTPRequest request) {

@@ -33,6 +33,7 @@ public final class Config {
 
     public static Integer PORT;
     public static Integer THREAD_POOL_SIZE;
+    public static Integer TIMEOUT;
     public static SocketFilter SOCKET_FILTER_HEADER = new HeaderSocketFilter();
     public static SocketListener SOCKET_LISTENER_HEADER = new HeaderSocketListener();
     public static HTTPHandler HTTP_HANDLER_HEADER = new HeaderHTTPHandler();
@@ -101,6 +102,10 @@ public final class Config {
         logger.debug("server shutdown port - 8008");
 
         logger.debug("server shutdown secret - shutdown");
+
+        Config.TIMEOUT = serverConfig.getInt("timeout");
+
+        logger.debug("server socket timeout - " + Config.TIMEOUT);
 
         Config.SERVER_NAME = serverConfig.getString("serverName");
         logger.debug("server name - " + Config.SERVER_NAME);

@@ -79,6 +79,16 @@ public class SocketObject {
 
     public void destory() {
         try {
+            this.socket.shutdownInput();
+        } catch (IOException e) {
+            // Todo 没想好怎么处理
+        }
+        try {
+            this.socket.shutdownOutput();
+        } catch (IOException e) {
+            // Todo 没想好怎么处理
+        }
+        try {
             if (this.br != null) br.close();
         } catch (IOException e) {
             e.printStackTrace();

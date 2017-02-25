@@ -19,7 +19,7 @@ public class URLDecodeHTTPHandler extends HTTPHandler {
             path = java.net.URLDecoder.decode(path, Config.DEFAULT_CHARSET);
             req.setRealPath(path);
         } catch (UnsupportedEncodingException e) {
-            throw new ServerException();
+            throw new ServerException(e);
         }
     }
 }

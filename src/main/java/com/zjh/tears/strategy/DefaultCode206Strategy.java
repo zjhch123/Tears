@@ -34,15 +34,18 @@ public class DefaultCode206Strategy implements HTTPStrategy {
             fis = new FileInputStream(file);
             fis.skip(start);
             fis.read(body);
+            res.setVersion(req.getVersion());
+            res.setMessage("Partial Content");
+            res.setCode(206);
             res.setBody(body);
             res.setHeader("Content-Range", "bytes " + start + "-" + end + "/" + file.length());
             res.setHeader("Content-Type", Util.getContentType(file));
             res.setHeader("Last-Modified", Util.getGMTString(new Date(file.lastModified())));
             res.setHeader("Connection", "close");
         } catch(java.nio.file.NoSuchFileException|java.io.FileNotFoundException e) {
-            throw new NotFoundException();
+            throw new NotFoundException(e);
         } catch (IOException e) {
-            throw new ServerException();
+            throw new ServerException(e);
         } finally {
             Util.closeFileInputStream(fis);
         }

@@ -1,6 +1,5 @@
 package com.zjh.tears;
 
-import com.zjh.tears.config.Config;
 import com.zjh.tears.model.SocketObject;
 
 import java.io.IOException;

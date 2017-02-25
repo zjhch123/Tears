@@ -75,11 +75,11 @@ public class HTTPRequest {
 
             return request;
         } catch (MalformedURLException e) {
-            throw new ServerException();
+            throw new ServerException(e);
         } catch(FileNotFoundException e) {
-            throw new NotFoundException();
+            throw new NotFoundException(e);
         } catch (IOException e) {
-            throw new ServerException();
+            throw new ServerException(e);
         } finally {
             HTTPRequest.closeBufferedReader(br);
             HTTPRequest.closeConn(conn);
