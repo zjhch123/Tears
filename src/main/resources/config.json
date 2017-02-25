@@ -2,6 +2,7 @@
   "serverConfig": {
     "port": "8080",
     "threadPoolSize": "10",
+    "timeout": 1000,
     "serverName": "Tears 1.5.2",
     "staticRootFile": "/Users/zhangjiahao/Desktop/play",
     "defaultCharset": "UTF-8",
