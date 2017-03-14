@@ -34,7 +34,7 @@ public class RequestFactory {
     private void initHeaders(String line, Request req) {
         Map<String, String> headers = new HashMap<>();
         Stream.of(line.split("\n"))
-                .map(str -> str.split(":"))
+                .map(str -> str.split(":", 2))
                 .forEach(arr -> headers.put(arr[0].trim(), arr[1].trim()));
         req.setHeaders(headers);
     }

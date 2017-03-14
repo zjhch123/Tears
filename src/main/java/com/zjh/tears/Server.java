@@ -52,7 +52,7 @@ public class Server {
         } catch (java.net.SocketException e) {
             // Todo 没想好怎么处理
         } catch (IOException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
         logger.debug("Bye~");
     }

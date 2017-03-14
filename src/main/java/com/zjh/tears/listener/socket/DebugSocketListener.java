@@ -2,17 +2,17 @@ package com.zjh.tears.listener.socket;
 
 import com.zjh.tears.model.SocketObject;
 
+import java.net.Socket;
+
 /**
  * Created by zhangjiahao on 2017/2/7.
  */
 public class DebugSocketListener extends SocketListener {
     @Override
     public void preHandler(SocketObject socketObject) {
-        System.out.println("*** request ***\n" + socketObject.getRequest().getRequestSource());
+        Socket socket = socketObject.getSocket();
+
+
     }
 
-    @Override
-    public void afterHandler(SocketObject socketObject) {
-        System.out.println("*** response ***\n" + new String(socketObject.getResponseSource()));
-    }
 }

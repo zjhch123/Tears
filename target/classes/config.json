@@ -2,6 +2,7 @@
   "serverConfig": {
     "port": "8080",
     "threadPoolSize": "10",
+    "timeout": "1000",
     "serverName": "Tears 1.5.2",
     "staticRootFile": "/Users/zhangjiahao/Desktop/play",
     "defaultCharset": "UTF-8",
@@ -15,7 +16,6 @@
       "com.zjh.tears.handler.DefaultIndexHTTPHandler",
       "com.zjh.tears.handler.URLDecodeHTTPHandler",
       "com.zjh.tears.handler.AcceptFileHTTPHandler",
-      "com.zjh.tears.handler.ResponseCodeHTTPHandler",
       "com.zjh.tears.handler.StaticFileChooseStrategyHTTPHandler",
       "com.zjh.tears.handler.StaticFileHTTPHandler",
       "com.zjh.tears.handler.ResponseHeaderHTTPHandler"

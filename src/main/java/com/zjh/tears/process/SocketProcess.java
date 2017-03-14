@@ -35,7 +35,7 @@ public class SocketProcess implements Runnable {
         } catch (java.net.SocketException e) {
             // 这里有时会报Broken pipe错误, 暂时没想好如何解决
         } catch (IOException e){
-            logger.warn(Util.stackTraceToString(e));
+            // logger.warn(Util.stackTraceToString(e));
         } catch (FilterException e) {
             logger.warn(e.getMessage());
         } finally {

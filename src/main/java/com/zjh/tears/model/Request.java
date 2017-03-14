@@ -103,7 +103,6 @@ public class Request {
         this.handlerStrategyName = handlerStrategyName;
     }
 
-
     public String getRequestIP() {
         return requestIP;
     }

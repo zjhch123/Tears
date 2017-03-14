@@ -12,7 +12,9 @@ import com.zjh.tears.util.Util;
 public class ResponseHeaderHTTPHandler extends HTTPHandler {
     @Override
     public void doWithRequest(Request req, Response res) throws HTTPException {
-        res.setHeader("Content-Length", String.valueOf(res.getBody().length));
+        if(res.getBody() != null) {
+            res.setHeader("Content-Length", String.valueOf(res.getBody().length));
+        }
         res.setHeader("Server", Config.SERVER_NAME);
         res.setHeader("Date", Util.getGMTString());
         res.setHeader("Accept-Ranges", "bytes");
