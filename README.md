@@ -8,7 +8,7 @@
 
 架构：
 
-![架构](https://image.hduzplus.xyz/image/1486735359756.png)
+![架构](https://raw.githubusercontent.com/zjhch123/Tears/master/doc/1486735359756.png)
 // zjh:架构图有点乱画的嫌疑
 
 简单的部署测试(个人服务器,配置较低)：
